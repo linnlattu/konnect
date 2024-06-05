@@ -1,92 +1,17 @@
-version: "3"
-services:
-  web:
-    image: ghcr.io/kuyio/konnect:latest
-    ports:
-      - "5000:5000"
-      - "51820:51820/udp"
-    links:
-      - db
-    environment:
-      PORT: 5000
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: Linnlattoo123
-      SECRET_KEY_BASE: "EQRHJkP99uBhr2oqx&#JMyMDpdUzgkjB"
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-    sysctls:
-      - net.ipv4.ip_forward=1
-      - net.ipv6.conf.all.disable_ipv6=0
-    networks:
-      - wg_internal
-    volumes:
-      - ./conf:/app/config/wireguard
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=wg_internal"
-      - "traefik.http.services.web.loadbalancer.server.port=5000"
-      - "traefik.http.routers.web.rule=Host(`18.139.183.113`)"
-      - "traefik.http.routers.web.tls=true"
-      - "traefik.http.routers.web.tls.certresolver=le"
-    restart: always
-
-  db:
-    image: postgres:12-alpine
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=Linnlattoo123
-    expose:
-      - "5432"
-    volumes:
-      - "database:/var/lib/postgresql/data"
-    networks:
-      - wg_internal
-    restart: always
-
-  traefik:
-    container_name: traefik
-    image: traefik:v2.2
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entryPoints.web.address=:80"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-      - "--entryPoints.websecure.address=:443"
-      - "--certificatesResolvers.le.acme.email=test@example.com"
-      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
-      - "--certificatesResolvers.le.acme.tlsChallenge=true"
-      - "--certificatesResolvers.le.acme.httpChallenge=true"
-      - "--certificatesResolvers.le.acme.httpChallenge.entryPoint=web"
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-      - 8080:8080
-    networks:
-      - wg_internal
-      - konnect_wg_ingress
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./letsencrypt:/letsencrypt
-    labels:
-      # Redirect all HTTP to HTTPS permanently
-      - traefik.http.routers.http_catchall.rule=HostRegexp(`{any:.+}`)
-      - traefik.http.routers.http_catchall.entrypoints=web
-      - traefik.http.routers.http_catchall.middlewares=https_redirect
-      - traefik.http.middlewares.https_redirect.redirectscheme.scheme=https
-      - traefik.http.middlewares.https_redirect.redirectscheme.permanent=true
-
-volumes:
-  database:
-
-networks:
-  wg_internal:
-    external: false
-  konnect_wg_ingress:
-    external: true
+docker run -d \
+  --restart=unless-stopped \
+  --pull=always \
+  --health-cmd="ip link | grep tun-firezone" \
+  --name=firezone-gateway \
+  --cap-add=NET_ADMIN \
+  --volume /var/lib/firezone \
+  --sysctl net.ipv4.ip_forward=1 \
+  --sysctl net.ipv4.conf.all.src_valid_mark=1 \
+  --sysctl net.ipv6.conf.all.disable_ipv6=0 \
+  --sysctl net.ipv6.conf.all.forwarding=1 \
+  --sysctl net.ipv6.conf.default.forwarding=1 \
+  --device="/dev/net/tun:/dev/net/tun" \
+  --env FIREZONE_TOKEN=".SFMyNTY.g2gDaANtAAAAJDIwYzdkNWIzLTMzZGEtNDUzMC1iNGZjLWNiNjk4YTc2ZWFkNW0AAAAkOTQ0NDYyYjEtM2IzYS00NWIyLTk5OWItYTBlN2QzNmM3OGNhbQAAADg3Q0kxSUhFOVZTM1RGNlI4NlBUUklGVkhPSERWSE5FTTY3UlFHUkExNUpCUVJSNzMyTTRHPT09PW4GADrXf-ePAWIAAVGA.jE9LHV1idB1TrdvlwaMwxa-mOQrPrhV4H7e_OmD52GU" \
+  --env FIREZONE_ENABLE_MASQUERADE="1" \
+  --env FIREZONE_NAME=$(hostname) \
+  ghcr.io/firezone/gateway:1.0
