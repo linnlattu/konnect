@@ -54,7 +54,7 @@
     - ECRRepositoryName: The name of the created ECR repository.
 # Usage
 1. Parameters
-    - Ensure you have the appropriate values for the parameters before deploying the stack. This includes the CIDR blocks for the VPC and subnets.
+    - Ensure you have the appropriate values for the parameters before deploying the stack. This includes the project name and environment.
 2. Deploy
     - Use the AWS Management Console, AWS CLI, or an infrastructure-as-code tool (AWS CloudFormation) to deploy the CloudFormation stack.
 3. Access Resources
@@ -83,7 +83,7 @@
     - EcsSecurityGroup: The ID of the created security group for ECS tasks.
 # Usage
 1. Parameters
-    - Ensure you have the appropriate values for the parameters before deploying the stack. This includes the CIDR blocks for the VPC and subnets.
+    - Ensure you have the appropriate values for the parameters before deploying the stack. This includes the project name, environment, and container port.
 2. Deploy
     - Use the AWS Management Console, AWS CLI, or an infrastructure-as-code tool (AWS CloudFormation) to deploy the CloudFormation stack.
 3. Access Resources
@@ -105,7 +105,7 @@
     - ClusterName: The name of the created ECS cluster.
 # Usage
 1. Parameters
-    - Ensure you have the appropriate values for the parameters before deploying the stack. This includes the CIDR blocks for the VPC and subnets.
+    - Ensure you have the appropriate values for the parameters before deploying the stack. This includes the project name and environment.
 2. Deploy
     - Use the AWS Management Console, AWS CLI, or an infrastructure-as-code tool (AWS CloudFormation) to deploy the CloudFormation stack.
 3. Access Resources
@@ -167,7 +167,7 @@
     - LoadBalancerDNSName: The DNS name of the created load balancer.
 # Usage
 1. Parameters
-    - Ensure you have the appropriate values for the parameters before deploying the stack. This includes the CIDR blocks for the VPC and subnets.
+    - Ensure you have the appropriate values for the parameters before deploying the stack. This includes the project name, environment, CPU, memory, container port, desired count, and ECR repository name.
 2. Deploy
     - Use the AWS Management Console, AWS CLI, or an infrastructure-as-code tool (AWS CloudFormation) to deploy the CloudFormation stack.
 3. Access Resources
