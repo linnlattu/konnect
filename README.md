@@ -42,8 +42,6 @@
     - ProjectName: The name of the project.
     - Environment: Deployment environment (e.g., dev, prod).
 # Resources
-    - ECRRepository: Creates an ECR repository with the specified repository name, image scanning configuration, tags, lifecycle policy, and repository policy.
-# Properties
 1. Elastic Container Registry
     - RepositoryName: The name of the repository. It is formed using the project name and environment.
     - ImageScanningConfiguration: Automatically scans images on push.
@@ -68,7 +66,9 @@
     - Environment: Deployment environment (e.g., dev, prod).
     - ContainerPort: Container port for the ECS service.
 # Resources
+1. ECS Security Group
     - EcsSecurityGroup: Creates a security group for ECS tasks with ingress rules to allow traffic on the specified container port.
+2. ECS Task Execution Role
     - EcsTaskExecutionRole: Creates an IAM role for ECS task execution with necessary policies to interact with ECR and CloudWatch Logs.
 # Properties
 1. EcsSecurityGroup
