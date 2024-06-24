@@ -10,7 +10,7 @@
     - PrivateSubnet1cidr: CIDR range for Private Subnet 1.
     - PrivateSubnet2cidr: CIDR range for Private Subnet 2.
     - PrivateSubnet3cidr: CIDR range for Private Subnet 3.
-# Resources
+# Resources & Properties
 1. Virtual Private Cloud
     - VPC: Creates a VPC with the specified CIDR block, DNS support, and DNS hostnames enabled.
     - InternetGateway: Creates an internet gateway and attaches it to the VPC.
@@ -41,7 +41,7 @@
 # Parameters
     - ProjectName: The name of the project.
     - Environment: Deployment environment (e.g., dev, prod).
-# Resources
+# Resources & Properties
 1. Elastic Container Registry
     - RepositoryName: The name of the repository. It is formed using the project name and environment.
     - ImageScanningConfiguration: Automatically scans images on push.
@@ -65,12 +65,7 @@
     - ProjectName: The name of the project.
     - Environment: Deployment environment (e.g., dev, prod).
     - ContainerPort: Container port for the ECS service.
-# Resources
-1. ECS Security Group
-    - EcsSecurityGroup: Creates a security group for ECS tasks with ingress rules to allow traffic on the specified container port.
-2. ECS Task Execution Role
-    - EcsTaskExecutionRole: Creates an IAM role for ECS task execution with necessary policies to interact with ECR and CloudWatch Logs.
-# Properties
+# Resources & Properties
 1. EcsSecurityGroup
     - GroupDescription: Description of the security group.
     - VpcId: VPC ID imported from an existing stack.
@@ -93,9 +88,7 @@
 # Parameters
     - ProjectName: The name of the project.
     - Environment: Deployment environment (e.g., dev, prod).
-# Resources
-    - ECSCluster: Creates an ECS cluster with the specified name and tags. Container insights are enabled for monitoring.
-# Properties
+# Resources & Properties
 1. ECS Cluster
     - ClusterName: The name of the ECS cluster. It is formed using the project name and environment.
     - ClusterSettings: Enables container insights for enhanced monitoring.
@@ -120,13 +113,7 @@
     - ContainerPort: Container port for the ECS service.
     - DesiredCount: Desired count for ECS service.
     - ECRName: ECR repository name.
-# Resources
-    - LoadBalancer: Creates an internet-facing load balancer with specified subnets and security groups.
-    - LoadBalancerListener: Creates a listener for the load balancer to forward HTTP traffic to the target group.
-    - TargetGroup: Creates a target group to route traffic to ECS tasks with health check settings.
-    - ECSTaskDefinition: Defines the ECS task with specified CPU, memory, network mode, and container definition.
-    - ECSService: Creates an ECS service to run the specified number of tasks using the Fargate launch type and connects it to the load balancer.
-# Properties
+# Resources & Properties
 1. LoadBalancer
     - Name: The name of the load balancer.
     - Subnets: Public subnets for the load balancer.
